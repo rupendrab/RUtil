@@ -57,14 +57,14 @@ lm_mtcars_1 <- function(df, field) {
         ret
 }
 
-multisimulation <- function() {
+multisimulation <- function(topcnt) {
         models <- lm_mtcars_1(df = mtcars1, field = "am")
         allfits <- models("allfits")
         topfits <- allfits %>%
                 filter(maxp < 0.1) %>%
                 mutate(adjrsq = round(adjrsq,2), sigma = round(sigma,2)) %>%
                 arrange(desc(adjrsq), maxp, sigma)
-        topfits <- topfits[1:10,]
+        topfits <- topfits[1:topcnt,]
         kable(topfits)
 }
 
