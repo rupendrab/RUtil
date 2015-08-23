@@ -117,7 +117,7 @@ mpg_by_am_wt_interaction <- function() {
 
 finalmodel <- function() {
         fitx <- lm(mpg ~ am * wt + vs, data = mtcars1); sx <- summary(fitx)
-        print(sx)
+        print(sx$coefficients)
         cx <- sx$coef[,1]
         am0 <- mtcars$am == 0; am1 <- mtcars$am == 1
         vs0 <- mtcars$vs == 0; vs1 <- mtcars$vs == 1
