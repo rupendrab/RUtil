@@ -138,3 +138,15 @@ finalmodel <- function() {
         abline(cx[1] + cx[2] + cx[4], cx[3] + cx[5], lwd=2, lty=1, col=co.pal[2])
         legend(x = 'topright', legend = c("V", "S"), lty=c(1,1), lwd = 2, col = co.pal[1:2])
 }
+
+finalresidualplot <- function() {
+        fitx <- lm(mpg ~ am * wt + vs, data = mtcars1); sx <- summary(fitx)
+        par(mfrow=c(1,1))
+        plot(x = mtcars$mpg, y = resid(fitx), type = 'n', xlab = "MPG", ylab = "Residuals")
+        title("Residuals mpg ~ am * wt + vs")
+        points(x = mtcars$mpg[mtcars$am==0], y = resid(fitx)[mtcars$am==0], cex = 1, pch = 21, bg = co.pal[1], col = "black")
+        points(x = mtcars$mpg[mtcars$am==1], y = resid(fitx)[mtcars$am==1], cex = 1, pch = 21, bg = co.pal[2], col = "black")
+        legends2 <- c("Automatic", "Manual")
+        legendcolors2 <- c(co.pal[1:2])
+        legend(x = 'topleft', legend = legends2, lty=c(1,1), lwd = 2, col = legendcolors2)
+}
