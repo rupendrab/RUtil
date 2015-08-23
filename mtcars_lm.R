@@ -67,3 +67,50 @@ multisimulation <- function() {
         topfits <- topfits[1:10,]
         kable(topfits)
 }
+
+mpgbyam_boxplot <- function() {
+        library(ggplot2, quietly = TRUE)
+        g <- ggplot(mtcars, aes(x = factor(am), y = mpg))
+        g <- g + geom_boxplot()
+        g <- g + xlab("Transmission (1=Manual, 0=Automatic") + ylab("MPG")
+        g <- g + ggtitle("MPG by Transmission Type")
+        print(g)
+        # quantile(mtcars$mpg[mtcars$am == 0])
+        # quantile(mtcars$mpg[mtcars$am == 1])
+}
+
+mpg_by_transmission_plot <- function() {
+        plot(mtcars$am, mtcars$mpg, cex=1, pch=21, bg="lightblue", xlab="Transmission (1=Manual, 0=Automatic)", ylab="MPG")
+        title("MPG by Transmission Type")
+        abline(h=min(mtcars[mtcars$am == 1,]$mpg), col="red", lwd=2)
+        abline(h=max(mtcars[mtcars$am == 0,]$mpg+0.2), col="blue", lwd=2)
+        abline(s_fit_am$coef[1,1], s_fit_am$coef[2,1])
+        abline(h=s_fit_am$coef[1,1], col="green", lwd=2)
+        abline(h=s_fit_am$coef[1,1] + s_fit_am$coef[2,1], col="green", lwd=2)
+}
+
+co.pal <- c("lightblue", "blue", "yellowgreen", "seagreen", "plum1", "red")
+
+mpg_by_am_wt_interaction() <- function() {
+        par(mfrow=c(2,1))
+        plot(x = mtcars$wt, y = mtcars$mpg, type = 'n', xlab = "Weight (lb/100)", ylab = "MPG")
+        title("Regression mpg ~ am * wt")
+        points(x = mtcars$wt[mtcars$am==0], y = mtcars$mpg[mtcars$am==0], cex = 2, pch = 21, bg = co.pal[1], col = "black")
+        points(x = mtcars$wt[mtcars$am==1], y = mtcars$mpg[mtcars$am==1], cex = 2, pch = 21, bg = co.pal[2], col = "black")
+        s01c <- s01$coeff[,1]
+        abline(s01c[1], s01c[3], lty=1, lwd=2, col=co.pal[1])
+        abline(s01c[1] + s01c[2], s01c[3] + s01c[4], lty=1, lwd=2, col=co.pal[2])
+        s1c <- s1$coeff[,1]
+        abline(s1c[1], s1c[2], lty=1, lwd=2, col="black")
+        legends <- c("Automatic", "Manual", "Overall")
+        legendcolors <- c(co.pal[1:2], "black")
+        legend(x = 'topright', legend = legends, lty=c(1,1), lwd = 2, col = legendcolors)
+        plot(x = mtcars$mpg, y = resid(f01), type = 'n', xlab = "MPG", ylab = "Residuals")
+        title("Residuals mpg ~ am * wt")
+        points(x = mtcars$mpg[mtcars$am==0], y = resid(f01)[mtcars$am==0], cex = 1, pch = 21, bg = co.pal[1], col = "black")
+        points(x = mtcars$mpg[mtcars$am==1], y = resid(f01)[mtcars$am==1], cex = 1, pch = 21, bg = co.pal[2], col = "black")
+        legends2 <- c("Automatic", "Manual")
+        legendcolors2 <- c(co.pal[1:2])
+        legend(x = 'topleft', legend = legends2, lty=c(1,1), lwd = 2, col = legendcolors2)
+        # points(x = mtcars$mpg, y = resid(lm(mpg ~ am, data=mtcars1)), cex = 1, pch = 21, bg = "black", col = "black")
+}
