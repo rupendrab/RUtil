@@ -72,7 +72,7 @@ mpgbyam_boxplot <- function() {
         library(ggplot2, quietly = TRUE)
         g <- ggplot(mtcars, aes(x = factor(am), y = mpg))
         g <- g + geom_boxplot()
-        g <- g + xlab("Transmission (1=Manual, 0=Automatic") + ylab("MPG")
+        g <- g + xlab("Transmission (1=Manual, 0=Automatic)") + ylab("MPG")
         g <- g + ggtitle("MPG by Transmission Type")
         print(g)
         # quantile(mtcars$mpg[mtcars$am == 0])
@@ -113,4 +113,28 @@ mpg_by_am_wt_interaction <- function() {
         legendcolors2 <- c(co.pal[1:2])
         legend(x = 'topleft', legend = legends2, lty=c(1,1), lwd = 2, col = legendcolors2)
         # points(x = mtcars$mpg, y = resid(lm(mpg ~ am, data=mtcars1)), cex = 1, pch = 21, bg = "black", col = "black")
+}
+
+finalmodel <- function() {
+        fitx <- lm(mpg ~ am * wt + vs, data = mtcars1); sx <- summary(fitx)
+        sx
+        cx <- sx$coef[,1]
+        am0 <- mtcars$am == 0; am1 <- mtcars$am == 1
+        vs0 <- mtcars$vs == 0; vs1 <- mtcars$vs == 1
+        usecex = 1
+        par(mfrow=c(1,2))
+        plot(x = mtcars$wt, y = mtcars$mpg, type = 'n', xlab = "Weight (lb/1000)", ylab = "MPG")
+        title("Automatic Transmission")
+        points(x = mtcars$wt[am0 & vs0], y = mtcars$mpg[am0 & vs0], cex=usecex, pch=21, bg=co.pal[1])
+        abline(cx[1], cx[3], lwd=2, lty=1, col=co.pal[1])
+        points(x = mtcars$wt[am0 & vs1], y = mtcars$mpg[am0 & vs1], cex=usecex, pch=21, bg=co.pal[2])
+        abline(cx[1]+cx[4], cx[3], lwd=2, lty=1, col=co.pal[2])
+        legend(x = 'topright', legend = c("V", "S"), lty=c(1,1), lwd = 2, col = co.pal[1:2])
+        plot(x = mtcars$wt, y = mtcars$mpg, type = 'n', xlab = "Weight (lb/1000)", ylab = "MPG")
+        title("Manual Transmission")
+        points(x = mtcars$wt[am1 & vs0], y = mtcars$mpg[am1 & vs0], cex=usecex, pch=21, bg=co.pal[1])
+        abline(cx[1] + cx[2], cx[3] + cx[5], lwd=2, lty=1, col=co.pal[1])
+        points(x = mtcars$wt[am1 & vs1], y = mtcars$mpg[am1 & vs1], cex=usecex, pch=21, bg=co.pal[2])
+        abline(cx[1] + cx[2] + cx[4], cx[3] + cx[5], lwd=2, lty=1, col=co.pal[2])
+        legend(x = 'topright', legend = c("V", "S"), lty=c(1,1), lwd = 2, col = co.pal[1:2])
 }
