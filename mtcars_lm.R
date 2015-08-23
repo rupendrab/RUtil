@@ -91,7 +91,7 @@ mpg_by_transmission_plot <- function() {
 
 co.pal <- c("lightblue", "blue", "yellowgreen", "seagreen", "plum1", "red")
 
-mpg_by_am_wt_interaction() <- function() {
+mpg_by_am_wt_interaction <- function() {
         par(mfrow=c(2,1))
         plot(x = mtcars$wt, y = mtcars$mpg, type = 'n', xlab = "Weight (lb/100)", ylab = "MPG")
         title("Regression mpg ~ am * wt")
